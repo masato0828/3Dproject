@@ -1,1 +1,2 @@
 D:\aso3年\github\3Dproject\skeleton\x64\Debug\skeleton.exe
+C:\Users\2016014\Documents\3Dproject\skeleton\x64\Debug\skeleton.exe

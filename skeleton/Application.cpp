@@ -40,6 +40,28 @@ void Application::Run(void)
 
 		ClsDrawScreen();// ‰æ–Ê‚Ìó‘Ô‚Ì‰Šú‰»
 
+		//DrawLine(0, 0, 100, 0, 0xffffff,true);
+		//DrawBox(0,0,100,100,0xffffff,true);
+		
+
+		int LEN_LINE = 5000.0f;
+		for (int x = 0; x < 1111; x++)
+		{
+			DrawLine3D(
+				VGet(-LEN_LINE, 0.0f, -LEN_LINE + x * 100),
+				VGet(LEN_LINE, 0.0f, LEN_LINE + x*100),
+				0xffffff);
+
+			DrawLine3D(
+				VGet(-LEN_LINE + x * 100, 0.0f, LEN_LINE),
+				VGet(-LEN_LINE + x * 100, 0.0f, -LEN_LINE),
+				0x00ff00);
+		}
+
+		DrawLine3D(
+			VGet(0.0f, LEN_LINE, 0.0f),
+			VGet(0.0f, -LEN_LINE, 0.0f),
+			0x0000ff);
 
 		ScreenFlip();// ‰æ–Ê“ü‚ê‘Ö‚¦
 
