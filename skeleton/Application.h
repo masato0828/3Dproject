@@ -15,6 +15,13 @@ public:
 	void Run(void);
 
 
+	const int blockSize = 100;
+	float posX;
+	float posY;
+	float posZ;
+	int size;
+
+
 protected:
 };
 

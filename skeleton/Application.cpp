@@ -12,7 +12,7 @@ Application::~Application()
 bool Application::Init(void)
 {
 	// 画面の大きさ
-	SetGraphMode(1200, 720, 32);
+	SetGraphMode(1200, 800, 32);
 
 	/// ウィンドウモード、フルスクリーンモードの変更を行う
 	/// <true>ウィンドウモード
@@ -26,7 +26,8 @@ bool Application::Init(void)
 		return false;
 	}
 
-
+	posX = 0.0f;
+	posY = 0.0f;
 
 	return true;
 }
@@ -42,26 +43,40 @@ void Application::Run(void)
 
 		//DrawLine(0, 0, 100, 0, 0xffffff,true);
 		//DrawBox(0,0,100,100,0xffffff,true);
+		if (CheckHitKey(KEY_INPUT_UP))
+		{
+			posX -= blockSize;
+		}
+		if (CheckHitKey(KEY_INPUT_DOWN))
+		{
+			posX += blockSize;
+		}
+
+		int LEN_LINE = 500.0f;
+		
 		
 
-		int LEN_LINE = 5000.0f;
-		for (int x = 0; x < 1111; x++)
+		for (int x = 0; x < 11; x++)
 		{
+			// 横線
 			DrawLine3D(
-				VGet(-LEN_LINE, 0.0f, -LEN_LINE + x * 100),
-				VGet(LEN_LINE, 0.0f, LEN_LINE + x*100),
+				VGet((1200/2)-LEN_LINE, 0.0f, (1200 / 2) -LEN_LINE + x * blockSize),
+				VGet((1200 / 2)+LEN_LINE, 0.0f, (1200 / 2) -LEN_LINE + x* blockSize),
 				0xffffff);
 
+			// 縦線
 			DrawLine3D(
-				VGet(-LEN_LINE + x * 100, 0.0f, LEN_LINE),
-				VGet(-LEN_LINE + x * 100, 0.0f, -LEN_LINE),
+				VGet((1200 / 2) -LEN_LINE + x * blockSize, 0.0f, (1200 / 2)+LEN_LINE),
+				VGet((1200 / 2) -LEN_LINE + x * blockSize, 0.0f, (1200 / 2) -LEN_LINE),
 				0x00ff00);
 		}
 
+		// 中央線
 		DrawLine3D(
-			VGet(0.0f, LEN_LINE, 0.0f),
-			VGet(0.0f, -LEN_LINE, 0.0f),
+			VGet(600.0f, LEN_LINE, (1200 / 2)),
+			VGet(600.0f, 0.0f, (1200 / 2)),
 			0x0000ff);
+
 
 		ScreenFlip();// 画面入れ替え
 
