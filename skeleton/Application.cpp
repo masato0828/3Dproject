@@ -26,6 +26,10 @@ bool Application::Init(void)
 		return false;
 	}
 
+	// カメラ初期値が左下のため初期値を真ん中にする
+	SetCameraPositionAndTargetAndUpVec(VGet(0, 200, -400)/*視点*/, VGet(0, 0, 0)/*見てる場所*/, VGet(0, 1, 0)/*釘を打たないとくるくる回る*/);
+
+
 	posX = 0.0f;
 	posY = 0.0f;
 
@@ -56,25 +60,25 @@ void Application::Run(void)
 		
 		
 
-		for (int x = 0; x < 11; x++)
+		for (int x = 0; x < 21; x++)
 		{
 			// 横線
 			DrawLine3D(
-				VGet((1200/2)-LEN_LINE, 0.0f, (1200 / 2) -LEN_LINE + x * blockSize),
-				VGet((1200 / 2)+LEN_LINE, 0.0f, (1200 / 2) -LEN_LINE + x* blockSize),
+				VGet(-LEN_LINE, 0.0f,-LEN_LINE + x * blockSize),
+				VGet(LEN_LINE, 0.0f, -LEN_LINE + x* blockSize),
 				0xffffff);
 
 			// 縦線
 			DrawLine3D(
-				VGet((1200 / 2) -LEN_LINE + x * blockSize, 0.0f, (1200 / 2)+LEN_LINE),
-				VGet((1200 / 2) -LEN_LINE + x * blockSize, 0.0f, (1200 / 2) -LEN_LINE),
+				VGet( -LEN_LINE + x * blockSize, 0.0f, +LEN_LINE),
+				VGet(-LEN_LINE + x * blockSize, 0.0f,  -LEN_LINE),
 				0x00ff00);
 		}
 
 		// 中央線
 		DrawLine3D(
-			VGet(600.0f, LEN_LINE, (1200 / 2)),
-			VGet(600.0f, 0.0f, (1200 / 2)),
+			VGet(0.0f, LEN_LINE, 0.0f),
+			VGet(0.0f, 0.0f, 0.0f),
 			0x0000ff);
 
 

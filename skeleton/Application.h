@@ -15,7 +15,7 @@ public:
 	void Run(void);
 
 
-	const int blockSize = 100;
+	const int blockSize = 50;
 	float posX;
 	float posY;
 	float posZ;
