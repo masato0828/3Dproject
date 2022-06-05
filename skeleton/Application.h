@@ -1,5 +1,7 @@
 #pragma once
 #include<memory>
+#include "Player.h"
+#include "Stage.h"
 
 class Application
 {
@@ -14,13 +16,8 @@ public:
 	bool Init(void);
 	void Run(void);
 
-
-	const int blockSize = 50;
-	float posX;
-	float posY;
-	float posZ;
-	int size;
-
+	std::unique_ptr<Player> player;
+	std::unique_ptr<Stage> stage;
 
 protected:
 };
