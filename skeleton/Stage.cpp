@@ -14,23 +14,21 @@ void Stage::Init()
 {
 	int file = FileRead_open("mapData/PositionDate.txt");
 
-	//int LineCounter;
-	//char StringBuffer[2048];
-	//int FileHandle;
+	int LineCounter;
+	char StringBuffer[2048];
 
-	//// 読み込みながら行数を数える
-	//LineCounter = 0;
-	//while (FileRead_eof(FileHandle) == 0)	// ファイルの終端に到達するまでループ
-	//{
-	//	// 1行読み込む
-	//	FileRead_gets(StringBuffer, sizeof(StringBuffer), FileHandle);
+	// 読み込みながら行数を数える
+	LineCounter = 0;
+	while (FileRead_eof(file) == 0)	// ファイルの終端に到達するまでループ
+	{
+		// 1行読み込む
+		FileRead_gets(StringBuffer, sizeof(StringBuffer), file);
 
-	//	// 行数を1増やす
-	//	LineCounter++;
-	//}
+		// 行数を1増やす
+		LineCounter++;
+	}
 
-	//// 行数を描画する
-	//DrawFormatString(0, 0, GetColor(255, 255, 255), "行数 : %d", LineCounter);
+	
 
 
 	// 名前を取得
@@ -39,7 +37,7 @@ void Stage::Init()
 
 
 
-
+	linecount = LineCounter;
 
 	// ループ取得
 
@@ -76,5 +74,9 @@ void Stage::Draw()
 		VGet(0.0f, LEN_LINE, 0.0f),
 		VGet(0.0f, 0.0f, 0.0f),
 		0x0000ff);
+
+
+	// 行数を描画する
+	DrawFormatString(0, 16, GetColor(255, 255, 255), "行数 : %d", linecount);
 
 }

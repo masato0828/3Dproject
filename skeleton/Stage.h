@@ -2,6 +2,9 @@
 class Stage
 {
 private:
+
+	int LineCounter;
+	int linecount;
 public:
 	Stage();
 	~Stage();
