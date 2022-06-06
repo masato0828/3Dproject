@@ -24,6 +24,11 @@ void Stage::Init()
 		// 1行読み込む
 		FileRead_gets(StringBuffer, sizeof(StringBuffer), file);
 
+		// 名前を取得
+		
+		// 位置を取得
+		// 回転を取得
+
 		// 行数を1増やす
 		LineCounter++;
 	}
@@ -31,9 +36,7 @@ void Stage::Init()
 	
 
 
-	// 名前を取得
-	// 位置を取得
-	// 回転を取得
+	
 
 
 

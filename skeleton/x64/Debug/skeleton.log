@@ -1,1 +1,15 @@
-﻿  skeleton.vcxproj -> D:\Users\2016014\Documents\GitHub\3Dproject\skeleton\x64\Debug\skeleton.exe
+﻿  Application.cpp
+  main.cpp
+  Player.cpp
+  Stage.cpp
+D:\aso3年\github\3Dproject\skeleton\Stage.cpp(53,15): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
+D:\aso3年\github\3Dproject\skeleton\Stage.cpp(61,9): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+D:\aso3年\github\3Dproject\skeleton\Stage.cpp(62,9): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+D:\aso3年\github\3Dproject\skeleton\Stage.cpp(67,42): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+D:\aso3年\github\3Dproject\skeleton\Stage.cpp(68,42): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+D:\aso3年\github\3Dproject\skeleton\Stage.cpp(74,14): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+  Utility.cpp
+D:\aso3年\github\3Dproject\skeleton\Utility.cpp(16,16): warning C4244: 'return': 'double' から 'float' への変換です。データが失われる可能性があります。
+D:\aso3年\github\3Dproject\skeleton\Utility.cpp(21,16): warning C4244: 'return': 'double' から 'float' への変換です。データが失われる可能性があります。
+  コードを生成中...
+  skeleton.vcxproj -> D:\aso3年\github\3Dproject\skeleton\x64\Debug\skeleton.exe
