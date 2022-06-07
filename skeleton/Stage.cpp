@@ -1,4 +1,7 @@
 #include <Dxlib.h>
+#include <fstream>
+#include <iostream>
+#include <vector>
 #include "Stage.h"
 
 Stage::Stage()
@@ -24,27 +27,15 @@ void Stage::Init()
 		// 1行読み込む
 		FileRead_gets(StringBuffer, sizeof(StringBuffer), file);
 
-		// 名前を取得
-		
-		// 位置を取得
-		// 回転を取得
-
 		// 行数を1増やす
 		LineCounter++;
 	}
 
-	
-
-
-	
-
-
-
 	linecount = LineCounter;
 
-	// ループ取得
-
 	FileRead_close(file);
+
+	MapLoder("mapData/PositionDate.txt");
 }
 
 void Stage::Update()
@@ -82,4 +73,112 @@ void Stage::Draw()
 	// 行数を描画する
 	DrawFormatString(0, 16, GetColor(255, 255, 255), "行数 : %d", linecount);
 
+	// ファイル読み込み表示
+	// 現状一行目のみ
+	//DrawFormatString(0, 32, GetColor(255, 255, 255), "%s",filedate.cbegin());
+
+}
+
+bool Stage::MapLoder(std::string fileName)
+{
+	// 中身がないとき
+	if (fileName == "")
+	{
+		return false;
+	}
+
+	// ファイルを入力用のストリームにして扱うための型
+	std::ifstream reading_file;
+
+	// ファイルをオープン
+	// 第二引数は省略可(デフォでinが入るが今回はテストのため記入、inは読み込み専用)
+	reading_file.open(fileName, std::ios::in);
+
+	// 読み込んだファイル一行の一時格納用
+	std::string reading_line_buffer;
+
+	// 文字列か数値かを判別(true : 文字列、false : 数値)
+	auto isNumber = [](const std::string& str)
+	{
+		for (char const& c : str) {
+			if (std::isdigit(c) == 0) return false;
+		}
+		return true;
+	};
+
+	auto isOneNumber = [](const std::string& str)
+	{	
+		//// 負数かどうか
+		//float s = str.at(0) + str.at(1);
+		//if (!std::signbit(s))
+		//{
+			// 文字かどうか
+			if (std::isdigit(str.at(0)) == 0)
+			{
+
+				return false;
+			}
+		//}
+		return true;
+	};
+	
+
+	//int型にして返す
+	auto getInt = [](std::ifstream& stremBuf, std::string& buf) 
+	{
+		std::getline(stremBuf, buf,',');
+		return atoi(buf.c_str());
+	};
+
+	// double型にして返す
+	auto getDouble = [](std::ifstream& stremBuf, std::string& buf)
+	{
+		std::getline(stremBuf, buf, ',');
+		return atof(buf.c_str());
+	};
+
+	std::string objName;
+	std::vector<VECTOR> pos;
+	std::vector<VECTOR> rotate;
+	//pos.emplace_back(VGet(0, 0, 0));
+	//rotate.emplace_back(VGet(0, 0, 0));
+	// ファイルの末尾まで読み込む
+	while (std::getline(reading_file, reading_line_buffer))
+	{
+		// コンポーネント名の取得
+		// filedateに格納
+		if (!isOneNumber(reading_line_buffer))
+		{
+			objName = reading_line_buffer;
+		}
+
+		//// 位置の取得
+		//while (std::getline(reading_file, reading_line_buffer))
+		//{
+		//	if (!isNumber(reading_line_buffer))
+		//	{
+		//		pos.emplace_back(VGet(5, 10, 15));
+		//	}
+		//	// 回転の取得
+		//	while (std::getline(reading_file, reading_line_buffer))
+		//	{
+		//		if (!isNumber(reading_line_buffer))
+		//		{
+		//			rotate.emplace_back(VGet(50.0, 100.0, 150.0));
+		//		}
+
+		//		VECTOR finelPos = VGet(pos.data()->x, pos.data()->y, pos.data()->z);
+		//		VECTOR finelRotate = VGet(rotate.data()->x, rotate.data()->y, rotate.data()->z);
+
+		//		// 最後に要素をいれる（オブジェクト名、位置）
+		//		filedate.insert(std::make_pair(objName,std::make_pair(finelPos,finelRotate)));
+		//	}
+
+		//	break;
+		//}
+	}
+
+	reading_file.close();
+
+	return true;
 }
