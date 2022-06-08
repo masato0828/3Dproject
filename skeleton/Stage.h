@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
-#include <map>
+#include <unordered_map>
+#include <list>
 class Stage
 {
 private:
@@ -8,7 +9,9 @@ private:
 	int LineCounter;
 	int linecount;
 
-	std::map < std::string, std::pair<VECTOR ,VECTOR>> filedate;
+	std::unordered_multimap < std::string, std::pair<VECTOR ,VECTOR>> filedate;
+
+	std::list<int> modeldata;
 public:
 	Stage();
 	~Stage();

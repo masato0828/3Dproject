@@ -1,6 +1,7 @@
 #include <Dxlib.h>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 #include <vector>
 #include "Stage.h"
 
@@ -15,8 +16,28 @@ Stage::~Stage()
 
 void Stage::Init()
 {
+	MapLoder("mapData/PositionDate.txt");
+
 	int file = FileRead_open("mapData/PositionDate.txt");
 
+	// キー値の格納（仮）
+	std::unordered_map<std::string, int> keymap;
+	
+	// 格納したデータの先頭を格納
+	//auto itr = filedate.begin();
+	// ぐるぐる
+	for (int i = 0; i < filedate.size(); i++)
+	{
+		auto itr = filedate.begin();
+		// ファイルロード
+ 		keymap.emplace(itr->first, MV1LoadModel(("model/PlaneMV1/" + itr->first +".mv1").c_str()));
+		modeldata.push_back(MV1LoadModel(("model/map/Plane(mv1)/" + itr->first + ".mv1").c_str()));
+		// 重複したファイル名を飛ばす処理
+		std::advance(itr ,filedate.count(itr->first));
+
+		i += filedate.count(itr->first);
+
+	}
 	int LineCounter;
 	char StringBuffer[2048];
 
@@ -47,6 +68,18 @@ void Stage::Draw()
 	int LEN_LINE = 500.0f;
 	auto blockSize = 50.0f;
 
+
+	for (const auto& key : modeldata)
+	{
+		for (const auto& [key_,data] : filedate)
+		{
+				MV1SetPosition(key, VGet(data.first.x, data.first.y, data.first.z));
+		}
+
+		
+
+		MV1DrawModel(key);
+	}
 
 	for (int x = 0; x < 21; x++)
 	{
@@ -108,30 +141,38 @@ bool Stage::MapLoder(std::string fileName)
 
 	auto isOneNumber = [](const std::string& str)
 	{	
-		//// 負数かどうか
-		//float s = str.at(0) + str.at(1);
-		//if (!std::signbit(s))
-		//{
+		
 			// 文字かどうか
-			if (std::isdigit(str.at(0)) == 0)
+		if (std::isdigit(str.at(0)))
+		{
+			return true;
+		}
+		else if(!std::isdigit(str.at(0)))
+		{
+			// 負数かどうか
+			double number = atoi(str.c_str());
+			number = number * number;
+			if (number < 0)
 			{
-
 				return false;
 			}
-		//}
-		return true;
+		}
+		else
+		{
+			return false;
+		}
 	};
 	
 
 	//int型にして返す
-	auto getInt = [](std::ifstream& stremBuf, std::string& buf) 
+	auto getInt = [](std::istringstream& stremBuf, std::string& buf)
 	{
 		std::getline(stremBuf, buf,',');
 		return atoi(buf.c_str());
 	};
 
 	// double型にして返す
-	auto getDouble = [](std::ifstream& stremBuf, std::string& buf)
+	auto getDouble = [](std::istringstream& stremBuf, std::string& buf)
 	{
 		std::getline(stremBuf, buf, ',');
 		return atof(buf.c_str());
@@ -140,8 +181,6 @@ bool Stage::MapLoder(std::string fileName)
 	std::string objName;
 	std::vector<VECTOR> pos;
 	std::vector<VECTOR> rotate;
-	//pos.emplace_back(VGet(0, 0, 0));
-	//rotate.emplace_back(VGet(0, 0, 0));
 	// ファイルの末尾まで読み込む
 	while (std::getline(reading_file, reading_line_buffer))
 	{
@@ -152,31 +191,53 @@ bool Stage::MapLoder(std::string fileName)
 			objName = reading_line_buffer;
 		}
 
-		//// 位置の取得
-		//while (std::getline(reading_file, reading_line_buffer))
-		//{
-		//	if (!isNumber(reading_line_buffer))
-		//	{
-		//		pos.emplace_back(VGet(5, 10, 15));
-		//	}
-		//	// 回転の取得
-		//	while (std::getline(reading_file, reading_line_buffer))
-		//	{
-		//		if (!isNumber(reading_line_buffer))
-		//		{
-		//			rotate.emplace_back(VGet(50.0, 100.0, 150.0));
-		//		}
 
-		//		VECTOR finelPos = VGet(pos.data()->x, pos.data()->y, pos.data()->z);
-		//		VECTOR finelRotate = VGet(rotate.data()->x, rotate.data()->y, rotate.data()->z);
+		// 位置の取得
+		while (std::getline(reading_file, reading_line_buffer))
+		{
+			if (isOneNumber(reading_line_buffer))
+			{
+				std::istringstream file_line(reading_line_buffer);
+				std::string str_buf;
+				int x = getInt(file_line, str_buf);
+				int y = getInt(file_line, str_buf);
+				int z = getInt(file_line, str_buf);
+				pos.emplace_back(VGet(x, y, z));
+			}
+			break;
+		}
 
-		//		// 最後に要素をいれる（オブジェクト名、位置）
-		//		filedate.insert(std::make_pair(objName,std::make_pair(finelPos,finelRotate)));
-		//	}
 
-		//	break;
-		//}
+		// 回転の取得
+		while (std::getline(reading_file, reading_line_buffer))
+		{
+			if (isOneNumber(reading_line_buffer))
+			{
+				std::istringstream file_line(reading_line_buffer);
+				std::string str_buf;
+
+				int x = getInt(file_line, str_buf);
+				int y = getInt(file_line, str_buf);
+				int z = getInt(file_line, str_buf);
+
+				rotate.emplace_back(VGet(
+					x,y,z
+				));
+			}
+
+
+			// それぞれに入っているデータの末尾を参照
+			VECTOR finelPos = VGet(pos.back().x, pos.back().y, pos.back().z);
+			VECTOR finelRotate = VGet(rotate.back().x, rotate.back().y, rotate.back().z);
+
+			// 最後に要素をいれる（オブジェクト名、位置）
+			filedate.insert(std::make_pair(objName, std::make_pair(finelPos, finelRotate)));
+			break;
+		}
+		
+		
 	}
+
 
 	reading_file.close();
 
