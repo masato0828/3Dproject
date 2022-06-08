@@ -1,1 +1,6 @@
+<<<<<<< HEAD
 D:\aso3年\github\3Dproject\skeleton\x64\Debug\skeleton.exe
+=======
+D:\Users\2016014\Desktop\3Dproject\skeleton\x64\Debug\skeleton.exe
+C:\Users\2016014\Documents\3Dproject\skeleton\x64\Debug\skeleton.exe
+>>>>>>> c866cc8b98412d875f268d20878c8bd78713589d

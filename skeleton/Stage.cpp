@@ -215,11 +215,17 @@ bool Stage::MapLoder(std::string fileName)
 			{
 				std::istringstream file_line(reading_line_buffer);
 				std::string str_buf;
+<<<<<<< HEAD
 
 				int x = getInt(file_line, str_buf);
 				int y = getInt(file_line, str_buf);
 				int z = getInt(file_line, str_buf);
 
+=======
+				double x = getDouble(file_line, str_buf);
+				double y = getDouble(file_line, str_buf);
+				double z = getDouble(file_line, str_buf);
+>>>>>>> c866cc8b98412d875f268d20878c8bd78713589d
 				rotate.emplace_back(VGet(
 					x,y,z
 				));
@@ -232,6 +238,10 @@ bool Stage::MapLoder(std::string fileName)
 
 			// 最後に要素をいれる（オブジェクト名、位置）
 			filedate.insert(std::make_pair(objName, std::make_pair(finelPos, finelRotate)));
+<<<<<<< HEAD
+=======
+
+>>>>>>> c866cc8b98412d875f268d20878c8bd78713589d
 			break;
 		}
 		

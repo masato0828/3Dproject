@@ -1,4 +1,5 @@
 ﻿  Stage.cpp
+<<<<<<< HEAD
 D:\aso3年\github\3Dproject\skeleton\Stage.cpp(38,22): warning C4267: '+=': 'size_t' から 'int' に変換しました。データが失われているかもしれません。
 D:\aso3年\github\3Dproject\skeleton\Stage.cpp(68,15): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
 D:\aso3年\github\3Dproject\skeleton\Stage.cpp(88,9): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
@@ -14,3 +15,19 @@ D:\aso3年\github\3Dproject\skeleton\Stage.cpp(224,8): warning C4244: '引数': 
 D:\aso3年\github\3Dproject\skeleton\Stage.cpp(224,6): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
 D:\aso3年\github\3Dproject\skeleton\Stage.cpp(164): warning C4715: '<lambda_dbf84493aea325fd6074427f8d9afd67>::operator()': 値を返さないコントロール パスがあります。
   skeleton.vcxproj -> D:\aso3年\github\3Dproject\skeleton\x64\Debug\skeleton.exe
+=======
+C:\Users\2016014\Documents\3Dproject\skeleton\Stage.cpp(48,15): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\2016014\Documents\3Dproject\skeleton\Stage.cpp(56,9): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2016014\Documents\3Dproject\skeleton\Stage.cpp(57,9): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2016014\Documents\3Dproject\skeleton\Stage.cpp(62,42): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2016014\Documents\3Dproject\skeleton\Stage.cpp(63,42): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2016014\Documents\3Dproject\skeleton\Stage.cpp(69,14): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2016014\Documents\3Dproject\skeleton\Stage.cpp(173,33): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2016014\Documents\3Dproject\skeleton\Stage.cpp(173,30): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2016014\Documents\3Dproject\skeleton\Stage.cpp(173,27): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2016014\Documents\3Dproject\skeleton\Stage.cpp(190,10): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2016014\Documents\3Dproject\skeleton\Stage.cpp(190,8): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2016014\Documents\3Dproject\skeleton\Stage.cpp(190,6): warning C4244: '引数': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Users\2016014\Documents\3Dproject\skeleton\Stage.cpp(132): warning C4715: '<lambda_dbf84493aea325fd6074427f8d9afd67>::operator()': 値を返さないコントロール パスがあります。
+  skeleton.vcxproj -> C:\Users\2016014\Documents\3Dproject\skeleton\x64\Debug\skeleton.exe
+>>>>>>> c866cc8b98412d875f268d20878c8bd78713589d
