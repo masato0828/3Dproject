@@ -118,7 +118,7 @@ bool Stage::MapLoder(std::string fileName)
 		else if(!std::isdigit(str.at(0)))
 		{
 			// •‰”‚©‚Ç‚¤‚©
-			int number = atoi(str.c_str());
+			double number = atoi(str.c_str());
 			number = number * number;
 			if (number < 0)
 			{
@@ -183,9 +183,9 @@ bool Stage::MapLoder(std::string fileName)
 			{
 				std::istringstream file_line(reading_line_buffer);
 				std::string str_buf;
-				int x = getDouble(file_line, str_buf);
-				int y = getDouble(file_line, str_buf);
-				int z = getDouble(file_line, str_buf);
+				double x = getDouble(file_line, str_buf);
+				double y = getDouble(file_line, str_buf);
+				double z = getDouble(file_line, str_buf);
 				rotate.emplace_back(VGet(
 					x,y,z
 				));
