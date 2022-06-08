@@ -1,6 +1,7 @@
 #include <Dxlib.h>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 #include <vector>
 #include "Stage.h"
 
@@ -108,30 +109,38 @@ bool Stage::MapLoder(std::string fileName)
 
 	auto isOneNumber = [](const std::string& str)
 	{	
-		//// 負数かどうか
-		//float s = str.at(0) + str.at(1);
-		//if (!std::signbit(s))
-		//{
+		
 			// 文字かどうか
-			if (std::isdigit(str.at(0)) == 0)
+		if (std::isdigit(str.at(0)))
+		{
+			return true;
+		}
+		else if(!std::isdigit(str.at(0)))
+		{
+			// 負数かどうか
+			int number = atoi(str.c_str());
+			number = number * number;
+			if (number < 0)
 			{
-
 				return false;
 			}
-		//}
-		return true;
+		}
+		else
+		{
+			return false;
+		}
 	};
 	
 
 	//int型にして返す
-	auto getInt = [](std::ifstream& stremBuf, std::string& buf) 
+	auto getInt = [](std::istringstream& stremBuf, std::string& buf)
 	{
 		std::getline(stremBuf, buf,',');
 		return atoi(buf.c_str());
 	};
 
 	// double型にして返す
-	auto getDouble = [](std::ifstream& stremBuf, std::string& buf)
+	auto getDouble = [](std::istringstream& stremBuf, std::string& buf)
 	{
 		std::getline(stremBuf, buf, ',');
 		return atof(buf.c_str());
@@ -140,8 +149,6 @@ bool Stage::MapLoder(std::string fileName)
 	std::string objName;
 	std::vector<VECTOR> pos;
 	std::vector<VECTOR> rotate;
-	//pos.emplace_back(VGet(0, 0, 0));
-	//rotate.emplace_back(VGet(0, 0, 0));
 	// ファイルの末尾まで読み込む
 	while (std::getline(reading_file, reading_line_buffer))
 	{
@@ -152,31 +159,52 @@ bool Stage::MapLoder(std::string fileName)
 			objName = reading_line_buffer;
 		}
 
-		//// 位置の取得
-		//while (std::getline(reading_file, reading_line_buffer))
-		//{
-		//	if (!isNumber(reading_line_buffer))
-		//	{
-		//		pos.emplace_back(VGet(5, 10, 15));
-		//	}
-		//	// 回転の取得
-		//	while (std::getline(reading_file, reading_line_buffer))
-		//	{
-		//		if (!isNumber(reading_line_buffer))
-		//		{
-		//			rotate.emplace_back(VGet(50.0, 100.0, 150.0));
-		//		}
 
-		//		VECTOR finelPos = VGet(pos.data()->x, pos.data()->y, pos.data()->z);
-		//		VECTOR finelRotate = VGet(rotate.data()->x, rotate.data()->y, rotate.data()->z);
+		// 位置の取得
+		while (std::getline(reading_file, reading_line_buffer))
+		{
+			if (isOneNumber(reading_line_buffer))
+			{
+				std::istringstream file_line(reading_line_buffer);
+				std::string str_buf;
+				int x = getInt(file_line, str_buf);
+				int y = getInt(file_line, str_buf);
+				int z = getInt(file_line, str_buf);
+				pos.emplace_back(VGet(x, y, z));
+			}
+			break;
+		}
 
-		//		// 最後に要素をいれる（オブジェクト名、位置）
-		//		filedate.insert(std::make_pair(objName,std::make_pair(finelPos,finelRotate)));
-		//	}
 
-		//	break;
-		//}
+		// 回転の取得
+		while (std::getline(reading_file, reading_line_buffer))
+		{
+			if (isOneNumber(reading_line_buffer))
+			{
+				std::istringstream file_line(reading_line_buffer);
+				std::string str_buf;
+				int x = getDouble(file_line, str_buf);
+				int y = getDouble(file_line, str_buf);
+				int z = getDouble(file_line, str_buf);
+				rotate.emplace_back(VGet(
+					x,y,z
+				));
+			}
+
+
+			// それぞれに入っているデータの末尾を参照
+			VECTOR finelPos = VGet(pos.back().x, pos.back().y, pos.back().z);
+			VECTOR finelRotate = VGet(rotate.back().x, rotate.back().y, rotate.back().z);
+
+			// 最後に要素をいれる（オブジェクト名、位置）
+			filedate.insert(std::make_pair(objName, std::make_pair(finelPos, finelRotate)));
+
+			break;
+		}
+		
+		
 	}
+
 
 	reading_file.close();
 
