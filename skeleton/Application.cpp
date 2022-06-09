@@ -30,6 +30,7 @@ bool Application::Init(void)
 	SetCameraPositionAndTargetAndUpVec(VGet(0, 200, -400)/*‹“_*/, VGet(0, 0, 0)/*Œ©‚Ä‚éêŠ*/, VGet(0, 1, 0)/*“B‚ğ‘Å‚½‚È‚¢‚Æ‚­‚é‚­‚é‰ñ‚é*/);
 	player = std::make_unique<Player>();
 	stage = std::make_unique<Stage>();
+	camera = std::make_unique<Camera>();
 
 	return true;
 }
@@ -41,11 +42,15 @@ void Application::Run(void)
 	{
 		player->Update();
 		stage->Update();
+		camera->Updata();
+		
 
 		ClsDrawScreen();// ‰æ–Ê‚Ìó‘Ô‚Ì‰Šú‰»
 		
 		stage->Draw();
 		player->Draw();
+		camera->Draw();
+		
 		
 
 		ScreenFlip();// ‰æ–Ê“ü‚ê‘Ö‚¦

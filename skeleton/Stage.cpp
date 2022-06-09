@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include "Utility.h"
 #include "Stage.h"
 
 Stage::Stage()
@@ -18,26 +19,28 @@ void Stage::Init()
 {
 	MapLoder("mapData/PositionDate.txt");
 
-	int file = FileRead_open("mapData/PositionDate.txt");
-
-	// キー値の格納（仮）
-	std::unordered_map<std::string, int> keymap;
-	
 	// 格納したデータの先頭を格納
-	//auto itr = filedate.begin();
-	// ぐるぐる
+	auto itr = filedate.begin();
+
+	// ぐるぐる	
 	for (int i = 0; i < filedate.size(); i++)
 	{
-		auto itr = filedate.begin();
 		// ファイルロード
- 		keymap.emplace(itr->first, MV1LoadModel(("model/PlaneMV1/" + itr->first +".mv1").c_str()));
-		modeldata.push_back(MV1LoadModel(("model/map/Plane(mv1)/" + itr->first + ".mv1").c_str()));
+ 		keymap.emplace(itr->first, MV1LoadModel(("model/map/Plane(mv1)/" + itr->first +".mv1").c_str()));
+		//modeldata.push_back(MV1LoadModel(("model/map/Plane(mv1)/" + itr->first + ".mv1").c_str()));
 		// 重複したファイル名を飛ばす処理
-		std::advance(itr ,filedate.count(itr->first));
+		auto count = filedate.count(itr->first);
+		std::advance(itr , count);
 
-		i += filedate.count(itr->first);
-
+		i += count;
 	}
+
+
+
+
+
+	int file = FileRead_open("mapData/PositionDate.txt");
+
 	int LineCounter;
 	char StringBuffer[2048];
 
@@ -54,13 +57,13 @@ void Stage::Init()
 
 	linecount = LineCounter;
 
+	angle = 0;
 	FileRead_close(file);
-
-	MapLoder("mapData/PositionDate.txt");
 }
 
 void Stage::Update()
 {
+	angle += 0.01;
 }
 
 void Stage::Draw()
@@ -69,38 +72,51 @@ void Stage::Draw()
 	auto blockSize = 50.0f;
 
 
-	for (const auto& key : modeldata)
-	{
+	//for (const auto& key : modeldata)
+	//{
 		for (const auto& [key_,data] : filedate)
 		{
-				MV1SetPosition(key, VGet(data.first.x, data.first.y, data.first.z));
+
+
+				MV1SetPosition(keymap.at(key_), VGet(data.first.x, data.first.y, data.first.z));
+
+				//DrawSphere3D(VGet(data.first.x, 30, data.first.z),10,10,0x00ff00,0xffffff,true);
+				
+
+
+				MV1SetRotationXYZ(keymap.at(key_), VGet(0,angle,0 ));
+				//MV1SetRotationXYZ(keymap.at(key_), DegRadVGet(0, data.second.y,0 ));
+
+				MV1DrawModel(keymap.at(key_));
+
+				DrawLine3D(VGet(data.first.x, data.first.y, data.first.z), VGet(data.first.x, data.first.y + 200, data.first.z), 0x00ff00);
 		}
 
 		
 
-		MV1DrawModel(key);
-	}
+	//	
+	//}
 
-	for (int x = 0; x < 21; x++)
-	{
-		// 横線
-		DrawLine3D(
-			VGet(-LEN_LINE, 0.0f, -LEN_LINE + x * blockSize),
-			VGet(LEN_LINE, 0.0f, -LEN_LINE + x * blockSize),
-			0xffffff);
+	//for (int x = 0; x < 21; x++)
+	//{
+	//	// 横線
+	//	DrawLine3D(
+	//		VGet(-LEN_LINE, 0.0f, -LEN_LINE + x * blockSize),
+	//		VGet(LEN_LINE, 0.0f, -LEN_LINE + x * blockSize),
+	//		0xffffff);
 
-		// 縦線
-		DrawLine3D(
-			VGet(-LEN_LINE + x * blockSize, 0.0f, +LEN_LINE),
-			VGet(-LEN_LINE + x * blockSize, 0.0f, -LEN_LINE),
-			0x00ff00);
-	}
+	//	// 縦線
+	//	DrawLine3D(
+	//		VGet(-LEN_LINE + x * blockSize, 0.0f, +LEN_LINE),
+	//		VGet(-LEN_LINE + x * blockSize, 0.0f, -LEN_LINE),
+	//		0x00ff00);
+	//}
 
-	// 中央線
-	DrawLine3D(
-		VGet(0.0f, LEN_LINE, 0.0f),
-		VGet(0.0f, 0.0f, 0.0f),
-		0x0000ff);
+	//// 中央線
+	//DrawLine3D(
+	//	VGet(0.0f, LEN_LINE, 0.0f),
+	//	VGet(0.0f, 0.0f, 0.0f),
+	//	0x0000ff);
 
 
 	// 行数を描画する
@@ -215,17 +231,10 @@ bool Stage::MapLoder(std::string fileName)
 			{
 				std::istringstream file_line(reading_line_buffer);
 				std::string str_buf;
-<<<<<<< HEAD
 
 				int x = getInt(file_line, str_buf);
 				int y = getInt(file_line, str_buf);
 				int z = getInt(file_line, str_buf);
-
-=======
-				double x = getDouble(file_line, str_buf);
-				double y = getDouble(file_line, str_buf);
-				double z = getDouble(file_line, str_buf);
->>>>>>> c866cc8b98412d875f268d20878c8bd78713589d
 				rotate.emplace_back(VGet(
 					x,y,z
 				));
@@ -238,10 +247,6 @@ bool Stage::MapLoder(std::string fileName)
 
 			// 最後に要素をいれる（オブジェクト名、位置）
 			filedate.insert(std::make_pair(objName, std::make_pair(finelPos, finelRotate)));
-<<<<<<< HEAD
-=======
-
->>>>>>> c866cc8b98412d875f268d20878c8bd78713589d
 			break;
 		}
 		
@@ -252,4 +257,9 @@ bool Stage::MapLoder(std::string fileName)
 	reading_file.close();
 
 	return true;
+}
+
+VECTOR Stage::DegRadVGet(double x, double y, double z)
+{
+	return VGet(Utility::Deg2RadD(x), Utility::Deg2RadD(y), Utility::Deg2RadD(z));
 }

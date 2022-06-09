@@ -50,50 +50,18 @@ void Player::Move()
 	if (CheckHitKey(KEY_INPUT_UP))
 	{
 		pos.z += 5;
-		if (rotate.y < Utility::Deg2RadF(180.0f))
-		{
-			rotate.y += 0.2f;
-		}
-		else
-		{
-			rotate.y -= 0.2f;
-		}
 	}
 	if (CheckHitKey(KEY_INPUT_DOWN))
 	{
 		pos.z -= 5;
-		if (rotate.y < Utility::Deg2RadF(0.0f))
-		{
-			rotate.y += 0.2f;
-		}
-		else
-		{
-			rotate.y -= 0.2f;
-		}
 	}
 	if (CheckHitKey(KEY_INPUT_LEFT))
 	{
 		pos.x -= 5;
-		if (rotate.y < Utility::Deg2RadF(90.0f))
-		{
-			rotate.y += 0.2f;
-		}
-		else
-		{
-			rotate.y -= 0.2f;
-		}
 	}
 	if (CheckHitKey(KEY_INPUT_RIGHT))
 	{
 		pos.x += 5;
-		if (rotate.y < Utility::Deg2RadF(-90.0f))
-		{
-			rotate.y += 0.2f;
-		}
-		else
-		{
-			rotate.y -= 0.2f;
-		}
 	}
 
 
