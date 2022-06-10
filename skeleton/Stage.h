@@ -17,6 +17,11 @@ private:
 	std::unordered_map<std::string, int> keymap;
 
 	double angle;
+
+
+	int testmHndle;
+	VECTOR angle_;
+
 public:
 	Stage();
 	~Stage();

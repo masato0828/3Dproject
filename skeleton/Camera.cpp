@@ -15,7 +15,8 @@ Camera::~Camera()
 
 void Camera::Init()
 {
-    pos = {740,1040,0-800};
+    //pos = {740,1040,0-800};
+    pos = { 0,580,0-800 };
 }
 
 void Camera::Updata()

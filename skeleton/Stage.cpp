@@ -17,6 +17,12 @@ Stage::~Stage()
 
 void Stage::Init()
 {
+	testmHndle = MV1LoadModel("model/test.mv1");
+
+	angle_ = {0,0,0};
+
+
+
 	MapLoder("mapData/PositionDate.txt");
 
 	// Ši”[‚µ‚½ƒf[ƒ^‚Ìæ“ª‚ðŠi”[
@@ -32,7 +38,7 @@ void Stage::Init()
 		auto count = filedate.count(itr->first);
 		std::advance(itr , count);
 
-		i += count;
+		i += count-1;
 	}
 
 
@@ -63,7 +69,25 @@ void Stage::Init()
 
 void Stage::Update()
 {
-	angle += 0.01;
+	if (CheckHitKey(KEY_INPUT_UP))
+	{
+		angle_.x -= 0.01;
+	}
+	
+	if (CheckHitKey(KEY_INPUT_DOWN))
+	{
+		angle_.y -= 0.01;
+	}
+	
+	if (CheckHitKey(KEY_INPUT_LEFT))
+	{
+		angle_.z -= 0.01;
+	}
+	
+	
+
+
+
 }
 
 void Stage::Draw()
@@ -84,7 +108,7 @@ void Stage::Draw()
 				
 
 
-				MV1SetRotationXYZ(keymap.at(key_), VGet(0,angle,0 ));
+				MV1SetRotationXYZ(keymap.at(key_), DegRadVGet(0, data.second.y, 0));
 				//MV1SetRotationXYZ(keymap.at(key_), DegRadVGet(0, data.second.y,0 ));
 
 				MV1DrawModel(keymap.at(key_));
@@ -92,6 +116,22 @@ void Stage::Draw()
 				DrawLine3D(VGet(data.first.x, data.first.y, data.first.z), VGet(data.first.x, data.first.y + 200, data.first.z), 0x00ff00);
 		}
 
+
+		MV1DrawModel(testmHndle);
+
+		MV1SetPosition(testmHndle,VGet(0,100,0));
+		MV1SetRotationXYZ(testmHndle, angle_);
+		
+
+		
+				DrawString(1100, 200 + (16 * 1), "x", 0xffffff);
+				DrawFormatString(1100+16, 200 + (16 * 1), 0xffffff,"%f",Utility::Rad2DegF( angle_.x));
+		
+				DrawString(1100, 200 + (16 * 2), "y", 0xffffff);
+				DrawFormatString(1100+16, 200 + (16 * 2), 0xffffff, "%f", Utility::Rad2DegF(angle_.y));
+	
+				DrawString(1100, 200 + (16 * 3), "z", 0xffffff);
+				DrawFormatString(1100+16, 200 + (16 * 3), 0xffffff, "%f", Utility::Rad2DegF(angle_.z));
 		
 
 	//	
