@@ -17,7 +17,7 @@ Stage::~Stage()
 
 void Stage::Init()
 {
-	testmHndle = MV1LoadModel("model/test.mv1");
+	
 
 	angle_ = {0,0,0};
 
@@ -113,26 +113,10 @@ void Stage::Draw()
 
 				MV1DrawModel(keymap.at(key_));
 
-				DrawLine3D(VGet(data.first.x, data.first.y, data.first.z), VGet(data.first.x, data.first.y + 200, data.first.z), 0x00ff00);
+				//DrawLine3D(VGet(data.first.x, data.first.y, data.first.z), VGet(data.first.x, data.first.y + 200, data.first.z), 0x00ff00);
 		}
 
-
-		MV1DrawModel(testmHndle);
-
-		MV1SetPosition(testmHndle,VGet(0,100,0));
-		MV1SetRotationXYZ(testmHndle, angle_);
-		
-
-		
-				DrawString(1100, 200 + (16 * 1), "x", 0xffffff);
-				DrawFormatString(1100+16, 200 + (16 * 1), 0xffffff,"%f",Utility::Rad2DegF( angle_.x));
-		
-				DrawString(1100, 200 + (16 * 2), "y", 0xffffff);
-				DrawFormatString(1100+16, 200 + (16 * 2), 0xffffff, "%f", Utility::Rad2DegF(angle_.y));
-	
-				DrawString(1100, 200 + (16 * 3), "z", 0xffffff);
-				DrawFormatString(1100+16, 200 + (16 * 3), 0xffffff, "%f", Utility::Rad2DegF(angle_.z));
-		
+		// グリッドを表示
 
 	//	
 	//}

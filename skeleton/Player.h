@@ -1,12 +1,29 @@
 #pragma once
+#include <chrono>
 
 class Player
 {
 private:
+	// モデルのハンドル用
 	int model;
+	// 位置情報
 	VECTOR pos;
+	// 回転情報
 	VECTOR rotate;
 
+	// アニメーションハンドル用
+	float animWalk;
+	//アニメーション再生総時間
+	float timeTotalAnimWalk;
+	// アニメーション更新用
+	float stepAnim;
+
+	float count;
+
+
+	// デルタタイム
+	std::chrono::system_clock::time_point mTickCount;
+	float mDeltaTime;
 public:
 	Player();
 	~Player();

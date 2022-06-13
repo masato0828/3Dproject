@@ -4,8 +4,9 @@
 class Camera
 {
 private:
-	VECTOR pos;
-	VECTOR rotate;
+	VECTOR pos_;
+	VECTOR angles_;
+
 
 public:
 	Camera();

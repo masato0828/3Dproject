@@ -15,37 +15,97 @@ Camera::~Camera()
 
 void Camera::Init()
 {
-    //pos = {740,1040,0-800};
-    pos = { 0,580,0-800 };
+    // 位置情報初期
+    pos_ = { 0,580,0-800 };
+
+    // カメラ角度初期
+    // ｘを軸とした回転
+    // ｙを軸とした回転
+    // ｚを軸とした回転
+    angles_ = {0.0f,0.0f,0.0f};
 }
 
 void Camera::Updata()
 {
-    // 方向キーでカメラの座標を移動
-    if (CheckHitKey(KEY_INPUT_W) == 1)
+    float angleSpeed = 0.05f;
+    float moveSpeed = 10;
+    float rad = 0.0f;
+
+    // カメラの向きに進む
+    if (CheckHitKey(KEY_INPUT_W))
     {
-        pos.y += 20.0f;
+        rad = Utility::Deg2RadD(0.0f);
+        pos_.x += sinf(angles_.y + rad) * moveSpeed;
+        pos_.z += cosf(angles_.y + rad) * moveSpeed;
+       
     }
-    if (CheckHitKey(KEY_INPUT_S) == 1)
+    if (CheckHitKey(KEY_INPUT_S))
     {
-        pos.y -= 20.0f;
+        rad = Utility::Deg2RadD(180.0f);
+        pos_.x += sinf(angles_.y + rad) * moveSpeed;
+        pos_.z += cosf(angles_.y + rad) * moveSpeed;
+        
     }
-    if (CheckHitKey(KEY_INPUT_A) == 1)
+    if (CheckHitKey(KEY_INPUT_A))
     {
-        pos.x -= 20.0f;
+        rad = Utility::Deg2RadD(-90.0f);
+        pos_.x += sinf(angles_.y + rad) * moveSpeed;
+        pos_.z += cosf(angles_.y + rad) * moveSpeed;
+       
     }
-    if (CheckHitKey(KEY_INPUT_D) == 1)
+    if (CheckHitKey(KEY_INPUT_D))
     {
-        pos.x += 20.0f;
+        rad = Utility::Deg2RadD(90.0f);
+        pos_.x += sinf(angles_.y + rad) * moveSpeed;
+        pos_.z += cosf(angles_.y + rad) * moveSpeed;
+        
     }
+    if (CheckHitKey(KEY_INPUT_N))
+    {
+        pos_.y += moveSpeed;
+    }
+    if (CheckHitKey(KEY_INPUT_M))
+    {
+        pos_.y -= moveSpeed;
+    }
+
+
+    // 向きを変える
+    if (CheckHitKey(KEY_INPUT_DOWN))
+    {
+        angles_.x += angleSpeed;
+    }
+    if (CheckHitKey(KEY_INPUT_UP))
+    {
+        angles_.x -= angleSpeed;
+    }
+    if (CheckHitKey(KEY_INPUT_LEFT))
+    {
+        angles_.y -= angleSpeed;
+    }
+    if (CheckHitKey(KEY_INPUT_RIGHT))
+    {
+        angles_.y += angleSpeed;
+    }
+
+
+    
 }
+
 
 void Camera::Draw()
 {
-    // カメラの位置と注視点をセット、注視点は原点
-    SetCameraPositionAndTarget_UpVecY(pos, VGet(0.0f, 0.0f, 0.0f));
+    // カメラの情報のセット
+    SetCameraPositionAndAngle(pos_,angles_.x, angles_.y, angles_.z);
 
-    DrawFormatString(0,100,0xffffff,"cameraPos x = %f:y = %f:z = %f",pos.x,pos.y,pos.z);
+
+
+#ifdef _DEBUG
+    //　カメラの位置情報デバッグ
+    DrawFormatString(0, 100, 0xffffff, "cameraPos x = %f:y = %f:z = %f", pos_.x, pos_.y, pos_.z);
+#endif // DEBUG
+
+    
 }
 
 
