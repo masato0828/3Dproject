@@ -21,7 +21,6 @@ private:
 
 	int testmHndle;
 	VECTOR angle_;
-
 public:
 	Stage();
 	~Stage();

@@ -17,27 +17,27 @@ void Player::Init()
 	
 	pos = { 0, 0, 0 };
 	rotate = { 0.0f, 0.0f, 0.0f };
-	MV1SetRotationXYZ(model,rotate);
-
-	MV1SetPosition(model,pos);
 
 	// モデルサイズセット
 	MV1SetScale(model, VGet(0.25, 0.25, 0.25));
 
 	// 再生モデルのアニメーション設定　0:成功
-	animWalk = MV1AttachAnim(model, 1);
+	//animWalk = MV1AttachAnim(model, 3);
+	anim.insert(std::make_pair(PLAYER_ANIM::IDLE, MV1AttachAnim(model, 2)));
+	anim.insert(std::make_pair(PLAYER_ANIM::JUMP, MV1AttachAnim(model, 3)));
+
 
 	// アニメーションの総再生時間の取得
-	timeTotalAnimWalk = MV1GetAnimTotalTime(model,animWalk);
+	timeTotalAnimWalk = MV1GetAnimTotalTime(model,anim.at(PLAYER_ANIM::IDLE));
 
 	// 更新ステップ
 	stepAnim = 0.0f;
 
 	// アニメーションの再生時間を設定
-	MV1SetAttachAnimTime(model,animWalk,stepAnim);
+	MV1SetAttachAnimTime(model, anim.at(PLAYER_ANIM::IDLE),stepAnim);
 
 	// デルタタイム
-	mTickCount = std::chrono::system_clock::now();
+	oldCount = std::chrono::system_clock::now();
 
 	count = 0;
 }
@@ -46,20 +46,24 @@ void Player::Update()
 {
 
 	// デルタタイム
-	auto tickCount = std::chrono::system_clock::now();
-	mDeltaTime = std::chrono::duration_cast<std::chrono::nanoseconds>(tickCount - mTickCount).count() / 1000000000.0f;
-	mTickCount = tickCount;
+	auto nowCount = std::chrono::system_clock::now();
+	deltaTime = std::chrono::duration_cast<std::chrono::nanoseconds>(nowCount - oldCount).count() / 1000000000.0f;
+	oldCount = nowCount;
 
 
-	// 新しいアニメーション再生時間をセット
-	stepAnim += (mDeltaTime * 20.0f);
+	
 	if (stepAnim > timeTotalAnimWalk)
 	{
 		// アニメーションをループ
 		stepAnim = 0.0f;
 	}
+	else
+	{
+		// 新しいアニメーション再生時間をセット
+		stepAnim += (deltaTime * 20.0f);
+	}
 
-	MV1SetAttachAnimTime(model,animWalk,stepAnim);
+	MV1SetAttachAnimTime(model,anim.at(PLAYER_ANIM::IDLE), stepAnim);
 
 
 	Move();
@@ -81,19 +85,19 @@ void Player::Draw()
 
 void Player::Move()
 {
-	if (CheckHitKey(KEY_INPUT_UP))
+	if (CheckHitKey(KEY_INPUT_W))
 	{
 		pos.z += 5;
 	}
-	if (CheckHitKey(KEY_INPUT_DOWN))
+	if (CheckHitKey(KEY_INPUT_S))
 	{
 		pos.z -= 5;
 	}
-	if (CheckHitKey(KEY_INPUT_LEFT))
+	if (CheckHitKey(KEY_INPUT_A))
 	{
 		pos.x -= 5;
 	}
-	if (CheckHitKey(KEY_INPUT_RIGHT))
+	if (CheckHitKey(KEY_INPUT_D))
 	{
 		pos.x += 5;
 	}

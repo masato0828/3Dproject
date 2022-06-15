@@ -22,7 +22,6 @@ void Stage::Init()
 	angle_ = {0,0,0};
 
 
-
 	MapLoder("mapData/PositionDate.txt");
 
 	// Ši”[‚µ‚½ƒf[ƒ^‚Ìæ“ª‚ğŠi”[

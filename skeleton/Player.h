@@ -1,5 +1,13 @@
 #pragma once
 #include <chrono>
+#include <map>
+
+enum class PLAYER_ANIM
+{
+	IDLE,
+	JUMP,
+
+};
 
 class Player
 {
@@ -10,6 +18,8 @@ private:
 	VECTOR pos;
 	// 回転情報
 	VECTOR rotate;
+
+	std::map<PLAYER_ANIM,float > anim;
 
 	// アニメーションハンドル用
 	float animWalk;
@@ -22,8 +32,8 @@ private:
 
 
 	// デルタタイム
-	std::chrono::system_clock::time_point mTickCount;
-	float mDeltaTime;
+	std::chrono::system_clock::time_point oldCount;
+	float deltaTime;
 public:
 	Player();
 	~Player();
