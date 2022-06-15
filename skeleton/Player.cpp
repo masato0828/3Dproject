@@ -28,7 +28,7 @@ void Player::Init()
 
 
 	// アニメーションの総再生時間の取得
-	timeTotalAnimWalk = MV1GetAnimTotalTime(model,anim.at(PLAYER_ANIM::IDLE));
+	timeTotalAnimWalk = MV1GetAnimTotalTime(model,2);
 
 	// 更新ステップ
 	stepAnim = 0.0f;
