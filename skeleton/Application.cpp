@@ -28,9 +28,10 @@ bool Application::Init(void)
 
 	// カメラ初期値が左下のため初期値を真ん中にする
 	SetCameraPositionAndTargetAndUpVec(VGet(0, 200, -400)/*視点*/, VGet(0, 0, 0)/*見てる場所*/, VGet(0, 1, 0)/*釘を打たないとくるくる回る*/);
-	player = std::make_unique<Player>();
+	//player = std::make_unique<Player>(this);
 	stage = std::make_unique<Stage>();
 	camera = std::make_unique<Camera>();
+	camera->SetPlayer(player);
 
 	return true;
 }
@@ -40,7 +41,7 @@ void Application::Run(void)
 	// ESCキーを押すとプログラム終了
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 	{
-		player->Update();
+		//player->Update();
 		stage->Update();
 		camera->Updata();
 		
@@ -48,7 +49,7 @@ void Application::Run(void)
 		ClsDrawScreen();// 画面の状態の初期化
 		
 		stage->Draw();
-		player->Draw();
+		//player->Draw();
 		camera->Draw();
 		
 		
@@ -60,4 +61,9 @@ void Application::Run(void)
 
 	// ソフトの終了
 	DxLib_End();
+}
+
+Camera* Application::GetCamera()
+{
+	return camera.get();
 }

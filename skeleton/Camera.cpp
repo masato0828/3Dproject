@@ -1,6 +1,8 @@
 #include <DxLib.h>
 #include "Utility.h"
 #include <math.h>
+#include<memory>
+#include "Player.h"
 #include "Camera.h"
 
 
@@ -29,33 +31,33 @@ void Camera::Updata()
 {
     float angleSpeed = 0.05f;
     float moveSpeed = 10;
-    float rad = 0.0f;
+    double rad = 0.0;
 
     // カメラの向きに進む
     if (CheckHitKey(KEY_INPUT_W))
     {
-        rad = Utility::Deg2RadD(0.0f);
+        rad = Utility::Deg2RadD(0.0);
         pos_.x += sinf(angles_.y + rad) * moveSpeed;
         pos_.z += cosf(angles_.y + rad) * moveSpeed;
        
     }
     if (CheckHitKey(KEY_INPUT_S))
     {
-        rad = Utility::Deg2RadD(180.0f);
+        rad = Utility::Deg2RadD(180.0);
         pos_.x += sinf(angles_.y + rad) * moveSpeed;
         pos_.z += cosf(angles_.y + rad) * moveSpeed;
         
     }
     if (CheckHitKey(KEY_INPUT_A))
     {
-        rad = Utility::Deg2RadD(-90.0f);
+        rad = Utility::Deg2RadD(-90.0);
         pos_.x += sinf(angles_.y + rad) * moveSpeed;
         pos_.z += cosf(angles_.y + rad) * moveSpeed;
        
     }
     if (CheckHitKey(KEY_INPUT_D))
     {
-        rad = Utility::Deg2RadD(90.0f);
+        rad = Utility::Deg2RadD(90.0);
         pos_.x += sinf(angles_.y + rad) * moveSpeed;
         pos_.z += cosf(angles_.y + rad) * moveSpeed;
         
@@ -95,9 +97,40 @@ void Camera::Updata()
 
 void Camera::Draw()
 {
-    // カメラの情報のセット
-    SetCameraPositionAndAngle(pos_,angles_.x, angles_.y, angles_.z);
+    // プレイヤーの情報がなければ
+    if (player == nullptr)
+    {
+        // カメラの情報のセット
+        SetCameraPositionAndAngle(pos_, angles_.x, angles_.y, angles_.z);
+    }
+    // プレイヤーの情報がある場合
+    else
+    {
+        // プレイヤー中心にしてカメラが動く
+        targetPos = player->get()->GetPos();
 
+        // 方向計測用
+        float revRad = Utility::Deg2RadF(180.0f);
+
+        // 方向
+        float dirX = sin(angles_.y+ revRad);
+        float dirZ = cos(angles_.y+ revRad);
+
+        // ベクトル（正規化）を取得
+        VECTOR dir = VNorm({dirX,0.0f,dirZ});
+
+        // カメラの移動スピードを取得
+        VECTOR movePow = VScale(dir, DIS_TARGET_TO_CAMERA);
+
+        // 
+        pos_ = VAdd(targetPos,movePow);
+
+        //
+        SetCameraPositionAndTargetAndUpVec(
+            pos_,
+            targetPos,
+            { 0.0f,1.0f,0.0f });
+    }
 
 
 #ifdef _DEBUG
@@ -108,4 +141,7 @@ void Camera::Draw()
     
 }
 
-
+void Camera::SetPlayer(std::unique_ptr<Player>* p)
+{
+    player = p;
+}

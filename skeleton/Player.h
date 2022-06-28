@@ -1,6 +1,8 @@
 #pragma once
 #include <chrono>
 #include <map>
+#include "Application.h"
+#include "Camera.h"
 
 enum class PLAYER_ANIM
 {
@@ -35,13 +37,19 @@ private:
 	std::chrono::system_clock::time_point oldCount;
 	float deltaTime;
 public:
-	Player();
+	//Application* app_;
+
+	//Player(Application* app);
 	~Player();
 	void Init();
 	void Update();
 	void Draw();
 
-	void Move();
+	void Move(bool& isMove);
+
+	VECTOR GetPos();
+
+	
 protected:
 
 };

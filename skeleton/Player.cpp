@@ -2,10 +2,11 @@
 #include "Player.h"
 #include "Utility.h"
 
-Player::Player()
-{
-	Init();
-}
+//Player::Player(Application* app)
+//{
+//	auto a = app;
+//	Init();
+//}
 
 Player::~Player()
 {
@@ -65,11 +66,19 @@ void Player::Update()
 
 	MV1SetAttachAnimTime(model,anim.at(PLAYER_ANIM::IDLE), stepAnim);
 
+	bool isHitKey = false;
+	Move(isHitKey);
 
-	Move();
+	if (!isHitKey)
+	{
+		Camera* camera = 0;
+	}
+	
 
 	MV1SetRotationXYZ(model, rotate);
 	MV1SetPosition(model, pos);
+
+
 }
 
 void Player::Draw()
@@ -83,24 +92,33 @@ void Player::Draw()
 
 }
 
-void Player::Move()
+void Player::Move(bool& isMove)
 {
 	if (CheckHitKey(KEY_INPUT_W))
 	{
+		isMove = true;
 		pos.z += 5;
 	}
 	if (CheckHitKey(KEY_INPUT_S))
 	{
+		isMove = true;
 		pos.z -= 5;
 	}
 	if (CheckHitKey(KEY_INPUT_A))
 	{
+		isMove = true;
 		pos.x -= 5;
 	}
 	if (CheckHitKey(KEY_INPUT_D))
 	{
+		isMove = true;
 		pos.x += 5;
 	}
 
 
+}
+
+VECTOR Player::GetPos()
+{
+	return pos;
 }

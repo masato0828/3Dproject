@@ -16,7 +16,9 @@ public:
 	bool Init(void);
 	void Run(void);
 
-	std::unique_ptr<Player> player;
+	Camera* GetCamera();
+
+	std::unique_ptr<Player>* player;
 	std::unique_ptr<Stage> stage;
 	std::unique_ptr<Camera> camera;
 protected:
