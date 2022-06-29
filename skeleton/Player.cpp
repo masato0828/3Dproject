@@ -2,11 +2,10 @@
 #include "Player.h"
 #include "Utility.h"
 
-//Player::Player(Application* app)
-//{
-//	auto a = app;
-//	Init();
-//}
+Player::Player()
+{
+	Init();
+}
 
 Player::~Player()
 {
@@ -17,7 +16,16 @@ void Player::Init()
 	model = MV1LoadModel("model/キャラ/Male_Casual.mv1");
 	
 	pos = { 0, 0, 0 };
-	rotate = { 0.0f, 0.0f, 0.0f };
+	angle = { 0.0f, 0.0f, 0.0f };
+	angleslocal = { 0.0f,Utility::Deg2RadF(180.0f),0.0f };
+
+	//モデルの角度を設定
+	VECTOR angles = angle;
+	angles.x += angleslocal.x;
+	angles.y += angleslocal.y;
+	angles.z += angleslocal.z;
+	MV1SetRotationXYZ(model, angles);
+
 
 	// モデルサイズセット
 	MV1SetScale(model, VGet(0.25, 0.25, 0.25));
@@ -64,18 +72,63 @@ void Player::Update()
 		stepAnim += (deltaTime * 20.0f);
 	}
 
-	MV1SetAttachAnimTime(model,anim.at(PLAYER_ANIM::IDLE), stepAnim);
+	MV1SetAttachAnimTime(model,anim.at(PLAYER_ANIM::JUMP), stepAnim);
 
-	bool isHitKey = false;
-	Move(isHitKey);
+	float movePow = 5.0f;
+	float moveHPow = movePow / 2.0f;
+	float rad = 0.0f;
+	// 操作キー判定
+	bool isHitMove = false;;
 
-	if (!isHitKey)
+	// 回転したい角度
+	float rotRad = 0.0f;;
+
+
+	Move(isHitMove, rotRad);
+
+	if (isHitMove)
 	{
-		Camera* camera = 0;
+		// カメラが向いている方向に移動する
+		pos.x += sinf(cameraAngle.y + rotRad) * moveHPow;
+		pos.z += cosf(cameraAngle.y + rotRad) * moveHPow;
+
+		// 移動方向にキャラクターの角度を徐々に変える
+		float radUnitAnglesY = angle.y;
+		float radMoveAnglesY = cameraAngle.y + rotRad;
+		Utility utility;
+		radMoveAnglesY = utility.RadIn2PI(radMoveAnglesY);
+
+		// 回転量が少ない方の回転方向を取得する(時計回り：1、反時計回り:-1)
+		float aroundDir = utility.DirNearAroundRad(radUnitAnglesY, radMoveAnglesY);
+
+		float diff = radMoveAnglesY - radUnitAnglesY;
+		float absDiff = abs(diff);
+
+		if (0.1f > absDiff)
+		{
+			// しきい値以内である
+			angle.y = radMoveAnglesY;
+		}
+		else
+		{
+			// 回転量を加える
+			angle.y += (SPEED_ROT_RAD * aroundDir);
+		}
+
+		// プレイヤーがくるくる回らないように固定する
+		angle.y = utility.RadIn2PI(angle.y);
 	}
 	
 
-	MV1SetRotationXYZ(model, rotate);
+	//モデルの角度を設定
+	VECTOR angles = angle;
+	angles.x += angleslocal.x;
+	angles.y += angleslocal.y;
+	angles.z += angleslocal.z;
+
+	// モデル座標の設定
+
+	MV1SetRotationXYZ(model, angles);
 	MV1SetPosition(model, pos);
 
 
@@ -87,38 +140,45 @@ void Player::Draw()
 
 #ifdef _DEBUG
 	auto color = 0xffffff;
-	DrawFormatString(0,0,color,"rotate = {x:%f,y:%f,z:%f}",rotate.x, rotate.y, rotate.z);
+	DrawFormatString(0,0,color,"rotate = {x:%f,y:%f,z:%f}",angle.x, angle.y, angle.z);
 #endif // _DEBUG
 
 }
 
-void Player::Move(bool& isMove)
+void Player::Move(bool& isMove,float& rotRad)
 {
 	if (CheckHitKey(KEY_INPUT_W))
 	{
 		isMove = true;
-		pos.z += 5;
+		rotRad = Utility::Deg2RadF(0.0f);
+		
 	}
-	if (CheckHitKey(KEY_INPUT_S))
+	else if (CheckHitKey(KEY_INPUT_S))
 	{
 		isMove = true;
-		pos.z -= 5;
-	}
-	if (CheckHitKey(KEY_INPUT_A))
+		rotRad = Utility::Deg2RadF(180.0f);
+	} 
+	else if (CheckHitKey(KEY_INPUT_A))
 	{
 		isMove = true;
-		pos.x -= 5;
+		rotRad = Utility::Deg2RadF(-90.0f);
 	}
-	if (CheckHitKey(KEY_INPUT_D))
+	else if (CheckHitKey(KEY_INPUT_D))
 	{
 		isMove = true;
-		pos.x += 5;
+		rotRad = Utility::Deg2RadF(90.0f);
 	}
 
+	
 
 }
 
 VECTOR Player::GetPos()
 {
 	return pos;
+}
+
+void Player::SetCameraAngle(VECTOR angle)
+{
+	cameraAngle = angle;
 }

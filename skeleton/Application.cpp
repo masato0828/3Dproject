@@ -1,5 +1,9 @@
 #include <DxLib.h>
 #include "Application.h"
+#include "common/Fps.h"
+#include "common/Key.h"
+#include "common/Mouse.h"
+
 
 Application::Application()
 {
@@ -28,10 +32,10 @@ bool Application::Init(void)
 
 	// カメラ初期値が左下のため初期値を真ん中にする
 	SetCameraPositionAndTargetAndUpVec(VGet(0, 200, -400)/*視点*/, VGet(0, 0, 0)/*見てる場所*/, VGet(0, 1, 0)/*釘を打たないとくるくる回る*/);
-	//player = std::make_unique<Player>(this);
+	player = std::make_unique<Player>();
 	stage = std::make_unique<Stage>();
 	camera = std::make_unique<Camera>();
-	camera->SetPlayer(player);
+	
 
 	return true;
 }
@@ -41,15 +45,16 @@ void Application::Run(void)
 	// ESCキーを押すとプログラム終了
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 	{
-		//player->Update();
+		player->Update();
 		stage->Update();
 		camera->Updata();
-		
+		camera->SetTargetAngle(player->GetPos());
+		player->SetCameraAngle(camera->GetAngle());
 
 		ClsDrawScreen();// 画面の状態の初期化
 		
 		stage->Draw();
-		//player->Draw();
+		player->Draw();
 		camera->Draw();
 		
 		

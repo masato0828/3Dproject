@@ -147,6 +147,9 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="common\Fps.cpp" />
+    <ClCompile Include="common\Key.cpp" />
+    <ClCompile Include="common\Mouse.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SkyDome.cpp" />
@@ -156,6 +159,9 @@
   <ItemGroup>
     <ClInclude Include="Application.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="common\Fps.h" />
+    <ClInclude Include="common\Key.h" />
+    <ClInclude Include="common\Mouse.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SkyDome.h" />
